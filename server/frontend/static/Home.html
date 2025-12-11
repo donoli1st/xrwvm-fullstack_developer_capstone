@@ -40,11 +40,61 @@
     </style>
     <script>
         const logout = async (e) => {
-            // Logout-Logik hier einfügen
-            // z.B.:
-            // sessionStorage.removeItem("username");
-            // window.location.href = "/";
+            // Build logout URL and Make GET request to logout endpoint
+            let TIME_FLASH_CONTAINER_SUCCESS = 2500;
+            let TIME_FLASH_CONTAINER_FAIL = 4000;
+
+            let logout_url = window.location.origin+"/djangoapp/logout";
+            const res = await fetch(logout_url, {
+                method: "GET",
+            });
+
+            const json = await res.json();
+            if (json) {
+                // Clear session storage and reload page
+                let username = sessionStorage.getItem('username');
+                sessionStorage.removeItem('username');
+                window.location.href = window.location.origin;
+                window.location.reload();
+                // Notify user of logout
+
+                alert("Logging out "+username+"...") 
+
+                //showAlert(`Logging out ${username}...`, "success", TIME_FLASH_CONTAINER_SUCCESS);
+                //setTimeout(() => {
+                //    window.location.href = window.location.origin;
+                //    window.location.reload();
+                //}, TIME_FLASH_CONTAINER_SUCCESS);
+            }
+            else {
+                alert("The user could not be logged out.")
+                //showAlert("The user could not be logged out.", "danger", TIME_FLASH_CONTAINER_FAIL);
+            }
         };
+
+        /*
+        function showAlert(message, type = "success", timeout = 3000) {
+            const container = document.getElementById("flash-container");
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show mb-0" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+            const alertEl = container.querySelector(".alert");
+            if (timeout > 0) {
+                setTimeout(() => {
+                    if (alertEl) {
+                        const bsAlert = bootstrap.Alert.getOrCreateInstance(alertEl);
+                        bsAlert.close();
+                    }
+                }, timeout);
+            }
+        }
+        */
 
         let checkSession = () => {
             let curr_user = sessionStorage.getItem("username");
@@ -55,7 +105,7 @@
             if (curr_user && curr_user !== "") {
                 container.innerHTML =
                     '<span class="text-white me-3">' + curr_user + '</span>' +
-                    '<a class="btn btn-outline-light btn-sm" onclick="logout()" href="/">Logout</a>';
+                    '<a class="btn btn-outline-light btn-sm" onclick="logout()">Logout</a>';
             } else {
                 container.innerHTML =
                     '<a class="btn btn-outline-light btn-sm me-2" href="/login">Login</a>' +
@@ -65,6 +115,10 @@
     </script>
 </head>
 <body onload="checkSession()">
+<div id="flash-container"
+        class="position-fixed top-0 start-50 translate-middle-x p-3"
+        style="z-index: 1080; min-width:200px;  min-height:200px; max-width: 500px;">
+</div>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00a8c6;">
     <div class="container">
         <a class="navbar-brand fw-bold" href="/">Best Cars</a>

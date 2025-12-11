@@ -69,7 +69,8 @@ def registration(request):
         "userName": "...",
         "password": "...",
         "firstName": "...",
-        "lastName": "..."
+        "lastName": "...",
+        "email": "..."
     }
     """
     if request.method != "POST":
@@ -84,10 +85,22 @@ def registration(request):
     password = data.get("password", "")
     first_name = data.get("firstName", "").strip()
     last_name = data.get("lastName", "").strip()
+    email = data.get("email", "").strip()
 
     if not username or not password:
-        return JsonResponse({"error": "Username and password are required"}, status=400)
+        return JsonResponse(
+            {"error": "Username and password are required"},
+            status=400,
+        )
 
+    # Optional but nice: require email too
+    if not email:
+        return JsonResponse(
+            {"error": "Email is required"},
+            status=400,
+        )
+
+    # Check if username already exists
     if User.objects.filter(username=username).exists():
         logger.warning("Registration failed, user already exists: %s", username)
         return JsonResponse(
@@ -95,18 +108,29 @@ def registration(request):
             status=400,
         )
 
+    # Optionally also check if email is already in use
+    if User.objects.filter(email=email).exists():
+        logger.warning("Registration failed, email already used: %s", email)
+        return JsonResponse(
+            {"email": email, "status": "Email already in use"},
+            status=400,
+        )
+
+    # Create user
     user = User.objects.create_user(
         username=username,
         password=password,
         first_name=first_name,
         last_name=last_name,
+        email=email,
     )
     user.save()
     logger.info("New user registered: %s", username)
 
+    # Log them in immediately and return JSON like the login endpoint
     login(request, user)
     return JsonResponse(
-        {"userName": username, "status": "Registered"},
+        {"userName": username, "status": "Authenticated"},
         status=201,
     )
 
