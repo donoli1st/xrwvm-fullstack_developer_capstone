@@ -7,6 +7,7 @@ from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
 from .models import CarMake, CarModel
+from .restapis import get_request, analyze_review_sentiments, post_review
 
 import logging
 import json
@@ -157,112 +158,49 @@ def get_cars(request):
     return JsonResponse({"CarModels":cars})
 
 # Render the index page with a list of dealerships
-def get_dealerships(request):
-    """
-    Renders the home page with a list of dealerships.
-    Replace the dummy list with a call to your external API if needed.
-    """
-    # Example with external API:
-    # url = "https://<your-cloud-function-url>/api/dealership"
-    # dealerships = get_dealers_from_cf(url)
-
-    dealerships = []  # placeholder
-    context = {"dealership_list": dealerships}
-
-    return render(request, "djangoapp/index.html", context)
+def get_dealerships(request, state="All"):
+    if(state == "All"):
+        endpoint = "/fetchDealers"
+    else:
+        endpoint = "/fetchDealers/"+state
+    dealerships = get_request(endpoint)
+    return JsonResponse({"status":200,"dealers":dealerships})
 
 
 # Render the reviews of a dealer
 def get_dealer_reviews(request, dealer_id):
-    """
-    Renders a template showing reviews for a specific dealer.
-    """
-    # Example with external API:
-    # url = "https://<your-cloud-function-url>/api/review"
-    # reviews = get_dealer_reviews_from_cf(url, dealer_id=dealer_id)
-
-    reviews = []  # placeholder
-    context = {
-        "dealer_id": dealer_id,
-        "reviews": reviews,
-    }
-    return render(request, "djangoapp/dealer_reviews.html", context)
+    # if dealer id has been provided
+    if(dealer_id):
+        endpoint = "/fetchReviews/dealer/"+str(dealer_id)
+        reviews = get_request(endpoint)
+        for review_detail in reviews:
+            response = analyze_review_sentiments(review_detail['review'])
+            print(response)
+            review_detail['sentiment'] = response['sentiment']
+        return JsonResponse({"status":200,"reviews":reviews})
+    else:
+        return JsonResponse({"status":400,"message":"Bad Request"})
 
 
 # Render dealer details (and optionally its reviews)
 def get_dealer_details(request, dealer_id):
-    """
-    Renders dealer details (and optionally related reviews).
-    """
-    # Example:
-    # dealer_url = "https://<your-cloud-function-url>/api/dealership"
-    # review_url = "https://<your-cloud-function-url>/api/review"
-    #
-    # dealer = None
-    # for d in get_dealers_from_cf(dealer_url):
-    #     if d.id == dealer_id:
-    #         dealer = d
-    #         break
-    #
-    # reviews = get_dealer_reviews_from_cf(review_url, dealer_id=dealer_id)
-
-    dealer = None
-    reviews = []
-    context = {
-        "dealer": dealer,
-        "dealer_id": dealer_id,
-        "reviews": reviews,
-    }
-    return render(request, "djangoapp/dealer_details.html", context)
+    if(dealer_id):
+        endpoint = "/fetchDealer/"+str(dealer_id)
+        dealership = get_request(endpoint)
+        return JsonResponse({"status":200,"dealer":dealership})
+    else:
+        return JsonResponse({"status":400,"message":"Bad Request"})
 
 
 # Submit a review (GET to show form, POST to send data)
 @csrf_exempt
-def add_review(request, dealer_id):
-    """
-    GET: render a review form.
-    POST: submit review data, usually to an external API.
-    """
-    if request.method == "GET":
-        context = {
-            "dealer_id": dealer_id,
-        }
-        return render(request, "djangoapp/add_review.html", context)
-
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            return JsonResponse({"error": "Authentication required"}, status=401)
-
+def add_review(request):
+    if(request.user.is_anonymous == False):
+        data = json.loads(request.body)
         try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-        review_text = data.get("review", "")
-        purchase = data.get("purchase", False)
-        purchase_date = data.get("purchase_date", None)
-        car_make = data.get("car_make", "")
-        car_model = data.get("car_model", "")
-        car_year = data.get("car_year", "")
-
-        payload = {
-            "time": datetime.utcnow().isoformat(),
-            "name": request.user.username,
-            "dealership": dealer_id,
-            "review": review_text,
-            "purchase": purchase,
-            "purchase_date": purchase_date,
-            "car_make": car_make,
-            "car_model": car_model,
-            "car_year": car_year,
-        }
-
-        # Example call to external API:
-        # url = "https://<your-cloud-function-url>/api/review"
-        # post_request(url, payload=payload)
-
-        logger.info("Review payload for dealer %s: %s", dealer_id, payload)
-
-        return JsonResponse({"status": "Review submitted", "dealer_id": dealer_id})
-
-    return JsonResponse({"error": "Method not allowed"}, status=405)
+            response = post_review(data)
+            return JsonResponse({"status":200})
+        except:
+            return JsonResponse({"status":401,"message":"Error in posting review"})
+    else:
+        return JsonResponse({"status":403,"message":"Unauthorized"})
