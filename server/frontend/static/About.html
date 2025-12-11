@@ -1,83 +1,151 @@
 <html>
 <head>
-  <link rel="stylesheet" href="/static/style.css">
-  <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Best Cars – About Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+            color: #fff;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+        }
+
+        .hero-section p {
+            max-width: 700px;
+        }
+
+        .team-card img {
+            object-fit: cover;
+            height: 260px;
+        }
+
+        .team-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
-<div>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
-    <div class="container-fluid">
-      <h2 style="padding-right: 5%;">Dealerships</h2>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" style="font-size: larger;" href="/about">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  
-    <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-        <h1 class="display-5 fw-bold">About Us</h1>
-        <p class="lead" style="display:flex; width:70%; justify-content:center">
-        Welcome to Best Cars, your trusted dealership for top-quality vehicles across North America. 
-        We offer a wide selection of domestic and imported cars at competitive prices, 
-        providing exceptional value and a seamless buying experience.
-        </p>
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
-      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30%;">
-        <img class="card-img-top" src="/static/pers_1.png" alt="Card image">
-        <div class="card-body">
-            <p class="title">James Miller</p>
-            <p>Senior Sales Consultant</p>
-            <p class="card-text">
-                James helps customers find the perfect car for their lifestyle and budget.
-                With years of experience, he makes the buying process simple and transparent.
-            </p>
-            <p>james.miller@example.com</p>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00a8c6;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Best Cars</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active fw-semibold" href="/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact Us</a>
+                </li>
+            </ul>
         </div>
-      </div>
-
-      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30%;">
-        <img class="card-img-top" src="/static/pers_3.png" alt="Card image">
-        <div class="card-body">
-            <p class="title">Emily Davis</p>
-            <p>Customer Experience Manager</p>
-            <p class="card-text">
-                Emily ensures every visitor feels welcome from the first hello to the final handover.
-                She coordinates test drives, follow-ups, and support after the sale.
-            </p>
-            <p>emily.davis@example.com</p>
-        </div>
-      </div>
-
-      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30%;">
-        <img class="card-img-top" src="/static/pers_2.png" alt="Card image">
-        <div class="card-body">
-            <p class="title">Alex Johnson</p>
-            <p>Finance & Leasing Specialist</p>
-            <p class="card-text">
-                Alex explains financing and leasing options in a clear, friendly way.
-                He works hard to secure fair rates so customers can drive away with confidence.
-            </p>
-            <p>alex.johnson@example.com</p>
-        </div>
-      </div>
     </div>
-    </div>
-    </div>
-    
-</div>
+</nav>
 
+<main class="py-5">
+    <div class="container">
+        <!-- Hero / Intro -->
+        <section class="hero-section mb-5 text-center text-md-start">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-3">About Us</h1>
+                    <p class="lead mb-0">
+                        Welcome to Best Cars, your trusted dealership for top-quality vehicles across North America.
+                        We offer a wide selection of domestic and imported cars at competitive prices,
+                        providing exceptional value and a seamless buying experience.
+                    </p>
+                </div>
+                <div class="col-md-4 mt-4 mt-md-0 text-center">
+                    <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                        Over 10,000 happy customers
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section>
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Meet Our Team</h2>
+                <p class="text-muted mb-0">
+                    Our experts are here to help you find the right car and enjoy every step of the journey.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 team-card">
+                        <img class="card-img-top" src="/static/pers_1.png" alt="James Miller">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">James Miller</h5>
+                            <p class="text-muted mb-2">Senior Sales Consultant</p>
+                            <p class="card-text">
+                                James helps customers find the perfect car for their lifestyle and budget.
+                                With years of experience, he makes the buying process simple and transparent.
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <small class="text-muted">james.miller@example.com</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 team-card">
+                        <img class="card-img-top" src="/static/pers_3.png" alt="Emily Davis">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Emily Davis</h5>
+                            <p class="text-muted mb-2">Customer Experience Manager</p>
+                            <p class="card-text">
+                                Emily ensures every visitor feels welcome from the first hello to the final handover.
+                                She coordinates test drives, follow-ups, and support after the sale.
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <small class="text-muted">emily.davis@example.com</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 team-card">
+                        <img class="card-img-top" src="/static/pers_2.png" alt="Alex Johnson">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Alex Johnson</h5>
+                            <p class="text-muted mb-2">Finance &amp; Leasing Specialist</p>
+                            <p class="card-text">
+                                Alex explains financing and leasing options in a clear, friendly way.
+                                He works hard to secure fair rates so customers can drive away with confidence.
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <small class="text-muted">alex.johnson@example.com</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="/static/bootstrap.bundle.min.js"></script>
+</body>
 </html>
