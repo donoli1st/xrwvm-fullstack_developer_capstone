@@ -1,64 +1,172 @@
 <html>
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="static/style.css">
-  <link rel="stylesheet" href="static/bootstrap.min.css">
-<script>
+    <meta charset="UTF-8">
+    <title>Best Cars – Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Bootstrap & Styles -->
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
-const logout = async (e) => {
-//Include the code for logout here.
-};
+        .hero-section {
+            background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+            color: #fff;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+        }
 
-let checkSession = ()=>{
-  let curr_user = sessionStorage.getItem("username");
+        .hero-section p {
+            max-width: 650px;
+        }
 
-  if (curr_user && curr_user !== "") {
-    document.getElementById("loginlogout").innerHTML = 
-    '<span class="homepage_links">' + curr_user +'</span>' +
-    '<a class="homepage_links" onclick="logout()" href="/">Logout</a>'
-  } else {
-    document.getElementById("loginlogout").innerHTML = 
-    '<a class="homepage_links" href="/login">Login</a>'+
-    '<a class="homepage_links"  href="/register">Register</a>'
-  }
- }
-</script>
+        .hero-image-card img {
+            object-fit: cover;
+            height: 260px;
+        }
+
+        .hero-image-card {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .btn-cta-main {
+            min-width: 180px;
+        }
+    </style>
+    <script>
+        const logout = async (e) => {
+            // Logout-Logik hier einfügen
+            // z.B.:
+            // sessionStorage.removeItem("username");
+            // window.location.href = "/";
+        };
+
+        let checkSession = () => {
+            let curr_user = sessionStorage.getItem("username");
+            const container = document.getElementById("loginlogout");
+
+            if (!container) return;
+
+            if (curr_user && curr_user !== "") {
+                container.innerHTML =
+                    '<span class="text-white me-3">' + curr_user + '</span>' +
+                    '<a class="btn btn-outline-light btn-sm" onclick="logout()" href="/">Logout</a>';
+            } else {
+                container.innerHTML =
+                    '<a class="btn btn-outline-light btn-sm me-2" href="/login">Login</a>' +
+                    '<a class="btn btn-light btn-sm" href="/register">Register</a>';
+            }
+        };
+    </script>
 </head>
 <body onload="checkSession()">
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
-  <div class="container-fluid">
-    <h2 style="padding-right: 5%;">Dealerships</h2>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" style="font-size: larger;" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
-        </li>
-      </ul>
-      <span class="navbar-text">
-        <div class="loginlink" id="loginlogout">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00a8c6;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Best Cars</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <!-- Linke Navigation -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active fw-semibold" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact Us</a>
+                </li>
+            </ul>
+
+            <!-- Rechte Seite: Login / Register -->
+            <div class="d-flex align-items-center ms-lg-3" id="loginlogout">
+                <!-- Wird von checkSession() befüllt -->
+            </div>
         </div>
-        </span>
     </div>
-  </div>
 </nav>
-<div style="display: flex;flex-direction: column;">
-<div class="card" style="width: 50%;margin-top: 50px;align-self: center;">
-  <img src="static/car_dealership.jpg" class="card-img-top" alt="...">
-  <div class="banner">
-    <h5>Welcome to our Dealerships!</h5>
-    <a href="/dealers" class="btn" style="background-color: aqua;margin:10px">View Dealerships</a>
-  </div>
-</div>
-</div>
+
+<main class="py-5">
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <h1 class="display-5 fw-bold mb-3">Find your next car with confidence.</h1>
+                    <p class="lead mb-4">
+                        Welcome to Best Cars – your trusted partner for high-quality vehicles across North America.
+                        Explore our network of dealerships and discover great offers on both new and pre-owned cars.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="/dealers" class="btn btn-light btn-cta-main">
+                            View Dealerships
+                        </a>
+                        <a href="/contact" class="btn btn-outline-light">
+                            Talk to our team
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm hero-image-card bg-white">
+                        <img src="/static/car_dealership.jpg" class="card-img-top" alt="Car dealership">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">Welcome to our Dealerships</h5>
+                            <p class="card-text text-muted mb-3">
+                                Browse locations, compare inventory, and book your next test drive in just a few clicks.
+                            </p>
+                            <a href="/dealers" class="btn btn-primary">
+                                Explore locations
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Info / Highlights -->
+        <section>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Wide selection</h5>
+                            <p class="card-text text-muted">
+                                From compact city cars to premium SUVs – find the vehicle that fits your life and budget.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Transparent pricing</h5>
+                            <p class="card-text text-muted">
+                                Competitive prices, clear offers, and no hidden fees. We keep things simple and honest.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Expert support</h5>
+                            <p class="card-text text-muted">
+                                Our team is here to help with financing, leasing, and after-sales questions whenever you need us.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
 </body>
 </html>
