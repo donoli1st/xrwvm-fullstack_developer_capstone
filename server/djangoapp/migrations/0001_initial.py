@@ -21,13 +21,13 @@ class Migration(migrations.Migration):
                     primary_key=True,
                     serialize=False,
                     verbose_name='ID')
-                ),
+                    ),
                 ('name', models.CharField(max_length=100)),
                 ('description', models.TextField(blank=True)),
-                ('country', models.CharField(
-                    blank=True,
-                    max_length=100,
-                    null=True)
+                ('country', models.CharField(blank=True,
+                                            max_length=100,
+                                            null=True
+                                            )
                 ),
             ],
         ),
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                     primary_key=True,
                     serialize=False,
                     verbose_name='ID')
-                ),
+                    ),
                 ('dealer_id', models.IntegerField()),
                 ('name', models.CharField(max_length=100)),
                 ('type', models.CharField(
@@ -53,9 +53,12 @@ class Migration(migrations.Migration):
                     default='SUV',
                     max_length=10)
                 ),
-                ('year', models.IntegerField(
+                (
+                    'year',
+                    models.IntegerField(
                     validators=[django.core.validators.MinValueValidator(2015),
-                                django.core.validators.MaxValueValidator(2023)]
+                                django.core.validators.MaxValueValidator(2023)
+                               ]
                 )
                 ),
                 ('color', models.CharField(
