@@ -160,6 +160,7 @@ def get_cars(request):
         )
     return JsonResponse({"CarModels": cars})
 
+
 # Render the index page with a list of dealerships
 def get_dealerships(request, state="All"):
     if (state == "All"):
@@ -168,7 +169,6 @@ def get_dealerships(request, state="All"):
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
-
 
 
 # Render the reviews of a dealer
@@ -215,7 +215,6 @@ def get_dealer_reviews(request, dealer_id):
     return JsonResponse({"status": 200, "reviews": review_list})
 
 
-
 # Render dealer details (and optionally its reviews)
 def get_dealer_details(request, dealer_id):
     if (dealer_id):
@@ -224,7 +223,6 @@ def get_dealer_details(request, dealer_id):
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
-
 
 
 # Submit a review (GET to show form, POST to send data)
