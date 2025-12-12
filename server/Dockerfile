@@ -11,6 +11,8 @@ RUN pip3 install -r requirements.txt
 COPY . $APP
 RUN python manage.py collectstatic --noinput
 EXPOSE 8000
+# RUN chown -R 1000:1000 /app
+RUN chown -R 1000:1000 /app/db.sqlite3 /app/static
 RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/bin/bash","/app/entrypoint.sh"]
 CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "djangoproj.wsgi"]
