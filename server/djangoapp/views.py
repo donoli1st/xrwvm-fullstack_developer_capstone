@@ -1,19 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
-from django.contrib import messages
-from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
-from .models import CarMake, CarModel
+from .models import CarModel
 from .restapis import get_request, analyze_review_sentiments, post_review
 
 import logging
 import json
 
 # If you have a restapis.py, uncomment and adjust:
-# from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
+# from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf
+# from .restapis import post_request
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +103,9 @@ def registration(request):
 
     # Check if username already exists
     if User.objects.filter(username=username).exists():
-        logger.warning("Registration failed, user already exists: %s", username)
+        logger.warning(
+            "Registration failed, user already exists: %s", username
+        )
         return JsonResponse(
             {"userName": username, "status": "User already exists"},
             status=400,
@@ -137,6 +137,7 @@ def registration(request):
         status=201,
     )
 
+
 # Get Cars Request
 def get_cars(request):
     """
@@ -154,23 +155,28 @@ def get_cars(request):
     car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
-    return JsonResponse({"CarModels":cars})
+        cars.append(
+            {"CarModel": car_model.name, "CarMake": car_model.car_make.name}
+        )
+    return JsonResponse({"CarModels": cars})
 
 # Render the index page with a list of dealerships
 def get_dealerships(request, state="All"):
-    if(state == "All"):
+    if (state == "All"):
         endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
-    return JsonResponse({"status":200,"dealers":dealerships})
+    return JsonResponse({"status": 200, "dealers": dealerships})
+
 
 
 # Render the reviews of a dealer
 def get_dealer_reviews(request, dealer_id):
     if request.method != "GET":
-        return JsonResponse({"status": 405, "message": "Method not allowed"}, status=405)
+        return JsonResponse(
+            {"status": 405, "message": "Method not allowed"}, status=405
+        )
 
     # Cloudant-Reviews holen
     endpoint = f"/fetchReviews/dealer/{dealer_id}"
@@ -191,11 +197,14 @@ def get_dealer_reviews(request, dealer_id):
 
         # Sentiment analysieren – aber defensiv
         try:
-            sentiment_response = analyze_review_sentiments(r.get("review", ""))
+            sentiment_response = analyze_review_sentiments(
+                r.get("review", "")
+            )
         except Exception:
             sentiment_response = None
 
-        if sentiment_response and isinstance(sentiment_response, dict) and "sentiment" in sentiment_response:
+        if (sentiment_response and isinstance(sentiment_response, dict) and
+                "sentiment" in sentiment_response):
             review_detail["sentiment"] = sentiment_response["sentiment"]
         else:
             # Fallback, wenn Service down / Fehler / None
@@ -206,25 +215,29 @@ def get_dealer_reviews(request, dealer_id):
     return JsonResponse({"status": 200, "reviews": review_list})
 
 
+
 # Render dealer details (and optionally its reviews)
 def get_dealer_details(request, dealer_id):
-    if(dealer_id):
+    if (dealer_id):
         endpoint = "/fetchDealer/"+str(dealer_id)
         dealership = get_request(endpoint)
-        return JsonResponse({"status":200,"dealer":dealership})
+        return JsonResponse({"status": 200, "dealer": dealership})
     else:
-        return JsonResponse({"status":400,"message":"Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
+
 
 
 # Submit a review (GET to show form, POST to send data)
 @csrf_exempt
 def add_review(request):
-    if(request.user.is_anonymous == False):
+    if not request.user.is_anonymous:
         data = json.loads(request.body)
         try:
-            response = post_review(data)
-            return JsonResponse({"status":200})
-        except:
-            return JsonResponse({"status":401,"message":"Error in posting review"})
+            post_review(data)
+            return JsonResponse({"status": 200})
+        except Exception:
+            return JsonResponse(
+                {"status": 401, "message": "Error in posting review"}
+            )
     else:
-        return JsonResponse({"status":403,"message":"Unauthorized"})
+        return JsonResponse({"status": 403, "message": "Unauthorized"})
