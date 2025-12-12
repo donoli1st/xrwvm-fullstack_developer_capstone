@@ -169,17 +169,41 @@ def get_dealerships(request, state="All"):
 
 # Render the reviews of a dealer
 def get_dealer_reviews(request, dealer_id):
-    # if dealer id has been provided
-    if(dealer_id):
-        endpoint = "/fetchReviews/dealer/"+str(dealer_id)
-        reviews = get_request(endpoint)
-        for review_detail in reviews:
-            response = analyze_review_sentiments(review_detail['review'])
-            print(response)
-            review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status":200,"reviews":reviews})
-    else:
-        return JsonResponse({"status":400,"message":"Bad Request"})
+    if request.method != "GET":
+        return JsonResponse({"status": 405, "message": "Method not allowed"}, status=405)
+
+    # Cloudant-Reviews holen
+    endpoint = f"/fetchReviews/dealer/{dealer_id}"
+    reviews = get_request(endpoint)  # Liste von dicts
+
+    review_list = []
+
+    for r in reviews:
+        review_detail = {
+            "name": r.get("name"),
+            "review": r.get("review"),
+            "purchase": r.get("purchase"),
+            "purchase_date": r.get("purchase_date"),
+            "car_make": r.get("car_make"),
+            "car_model": r.get("car_model"),
+            "car_year": r.get("car_year"),
+        }
+
+        # Sentiment analysieren – aber defensiv
+        try:
+            sentiment_response = analyze_review_sentiments(r.get("review", ""))
+        except Exception:
+            sentiment_response = None
+
+        if sentiment_response and isinstance(sentiment_response, dict) and "sentiment" in sentiment_response:
+            review_detail["sentiment"] = sentiment_response["sentiment"]
+        else:
+            # Fallback, wenn Service down / Fehler / None
+            review_detail["sentiment"] = "neutral"
+
+        review_list.append(review_detail)
+
+    return JsonResponse({"status": 200, "reviews": review_list})
 
 
 # Render dealer details (and optionally its reviews)

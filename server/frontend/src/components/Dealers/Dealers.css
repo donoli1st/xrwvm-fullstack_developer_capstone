@@ -86,3 +86,98 @@ table{
   transform: scale(1.1);
   border: solid lightgray;
 }
+
+.dealer-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Dealer header card */
+.dealer-header-card {
+    border-radius: 1rem;
+}
+
+/* Post review button */
+.post-review-btn {
+    border-radius: 999px;
+    font-size: 0.9rem;
+    padding-inline: 1.2rem;
+}
+
+.post-review-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+/* Reviews panel */
+.reviews_panel {
+    margin-top: 0.5rem;
+}
+
+/* Individual review cards */
+.review_card {
+    border-radius: 0.85rem;
+    box-shadow: 0 0.5rem 1.25rem rgba(15, 23, 42, 0.05);
+    border: none;
+}
+
+.emotion_icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.review_card .card-text {
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+/* Small screens */
+@media (max-width: 576px) {
+    .dealer-header-card {
+        padding: 0.75rem;
+    }
+
+    .post-review-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.dealers-page {
+    background-color: #f8f9fa;
+}
+
+.dealers-table tbody tr:hover {
+    background-color: #f3f4f6;
+}
+
+.dealer-link {
+    text-decoration: none;
+    color: #0d6efd;
+    font-weight: 500;
+}
+
+.dealer-link:hover {
+    text-decoration: underline;
+}
+
+.review_icon {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.postreview-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.postreview-card {
+    border-radius: 1rem;
+}
+
+.emotion_icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
